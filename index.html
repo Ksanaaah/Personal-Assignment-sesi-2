@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet Sesi 2: Menemukan Kembali Jati Diri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            emerald: {
+              850: '#064e3b',
+              950: '#022c22'
+            },
+            sand: {
+              50: '#faf8f5',
+              100: '#f5f1eb',
+              200: '#ebe3d7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+        font-size: 11pt;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+        padding: 1.5rem !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      textarea, input, select {
+        border-color: #d1d5db !important;
+        background-color: transparent !important;
+        resize: none !important;
+        box-shadow: none !important;
+      }
+      .page-break-avoid {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+
+    /<em> Wadah render PDF: lebar tetap 1024px </em>/
+    #pdf-container { position:absolute; top:0; left:0; width:1024px; background:#fff; z-index:-1; pointer-events:none; }
+
+    /<em> Custom range slider thumb styling </em>/
+    input[type=range]::-webkit-slider-thumb {
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #047857;
+      cursor: pointer;
+      -webkit-appearance: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+
+<body class="bg-stone-100 text-stone-800 font-sans antialiased min-h-screen pb-16">
+  <header class="no-print bg-white/90 backdrop-blur sticky top-0 z-50 border-b border-stone-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-bold font-serif text-lg shadow-sm">
+          A
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-emerald-800">AMI Muslim Growth</p>
+          <h1 class="text-sm sm:text-base font-bold text-stone-900 leading-tight">Digital Worksheet — Sesi 2</h1>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <span id="saveStatus" class="text-xs text-stone-500 font-medium px-2 py-1 rounded bg-stone-100 hidden sm:inline-block">
+          Draft otomatis tersimpan
+        </span>
+        <button onclick="saveProgressManually()" class="px-3.5 py-1.5 text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg transition border border-stone-300">
+          Simpan Draf
+        </button>
+        <button onclick="downloadPdf()" id="btnPdfTop" class="px-4 py-1.5 text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg shadow-sm flex items-center space-x-1.5 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+          </svg>
+          <span>Unduh PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-8">
+    
+    <!-- Hero Header / Cover Page for Printable Document -->
+    <section class="bg-gradient-to-br from-emerald-900 via-emerald-850 to-stone-900 text-white p-6 sm:p-10 rounded-2xl shadow-md border border-emerald-800/40 relative overflow-hidden page-break-avoid">
+      <div class="relative z-10 space-y-4">
+        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-800/80 text-emerald-200 border border-emerald-600/40">
+          Personal Growth Journal • Tahap 2: Integrate Potentials
+        </div>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-tight text-white leading-tight">
+          Menemukan Kembali Jati Diri yang Sering Kita Ragukan
+        </h2>
+        <p class="text-sm sm:text-base text-emerald-100/90 leading-relaxed max-w-3xl">
+          Lembar refleksi pribadi untuk menyelaraskan akal, empati, fisik, dan nurani menuju <span class="font-semibold text-amber-200">Coherent Heart</span>, mengakhiri pola <em>people-pleasing</em>, serta membangun ketegasan batasan diri (<em>healthy boundaries</em>).
+        </p>
+
+        <!-- Form Identitas Peserta -->
+        <div class="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-emerald-800/60 mt-4 text-stone-900">
+          <div>
+            <label class="block text-xs font-medium text-emerald-200 mb-1">Nama Peserta / Panggilan</label>
+            <input type="text" id="participantName" placeholder="Contoh: Ridha / Fitri / Mas Nan" class="w-full text-sm bg-white/95 rounded-lg px-3 py-2 border-0 focus:ring-2 focus:ring-amber-300 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-emerald-200 mb-1">Tanggal Pengisian</label>
+            <input type="date" id="assignmentDate" class="w-full text-sm bg-white/95 rounded-lg px-3 py-2 border-0 focus:ring-2 focus:ring-amber-300 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-emerald-200 mb-1">Peran Utama Saat Ini</label>
+            <input type="text" id="participantRole" placeholder="Contoh: Ibu Rumah Tangga / ASN / Profesional" class="w-full text-sm bg-white/95 rounded-lg px-3 py-2 border-0 focus:ring-2 focus:ring-amber-300 outline-none">
+          </div>
+        </div>
+      </div>
+      <!-- Subtle Decorative background pattern -->
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-emerald-700/20 rounded-full blur-3xl pointer-events-none"></div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">1</span>
+          <span>Langkah 1 (Paling Mudah) — Asesmen Keseimbangan Diri</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">Audit 4 Instrumen Fitrah (Sensing, Reasoning, Empathy, Conscience)</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          <strong>Maksudnya:</strong> Memeriksa apakah ada instrumen yang sedang mogok kerja atau beroperasi berlebihan secara tidak proporsional.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Potensi 1: Sensing -->
+        <div class="bg-stone-50 p-4 sm:p-5 rounded-xl border border-stone-200">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="font-semibold text-stone-800 text-sm sm:text-base">1. Kepekaan Fisik & Sensorik (Sensing)</span>
+              <p class="text-xs text-stone-500">Kapasitas mengenali sinyal tubuh: lelah, sesak dada, butuh istirahat, lapar emosional.</p>
+            </div>
+            <span id="scoreSensingVal" class="text-emerald-700 font-bold text-lg px-3 py-1 bg-white rounded-lg border border-stone-200">3/5</span>
+          </div>
+          <input type="range" min="1" max="5" value="3" id="scoreSensing" oninput="updatePotentialsAudit()" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+          <div class="flex justify-between text-[11px] text-stone-400 mt-1 font-medium">
+            <span>1: Mengabaikan tubuh hingga jatuh sakit</span>
+            <span>5: Sadar penuh & menghormati batas fisik</span>
+          </div>
+        </div>
+
+        <!-- Potensi 2: Reasoning -->
+        <div class="bg-stone-50 p-4 sm:p-5 rounded-xl border border-stone-200">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="font-semibold text-stone-800 text-sm sm:text-base">2. Logika Berpikir (Reasoning)</span>
+              <p class="text-xs text-stone-500">Kapasitas berpikir jernih, membedakan fakta vs asumsi, serta mengurai masalah objektif.</p>
+            </div>
+            <span id="scoreReasoningVal" class="text-emerald-700 font-bold text-lg px-3 py-1 bg-white rounded-lg border border-stone-200">3/5</span>
+          </div>
+          <input type="range" min="1" max="5" value="3" id="scoreReasoning" oninput="updatePotentialsAudit()" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+          <div class="flex justify-between text-[11px] text-stone-400 mt-1 font-medium">
+            <span>1: Overthinking & tenggelam asumsi</span>
+            <span>5: Rasional, analitis, & jernih mengambil solusi</span>
+          </div>
+        </div>
+
+        <!-- Potensi 3: Empathy -->
+        <div class="bg-stone-50 p-4 sm:p-5 rounded-xl border border-stone-200">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="font-semibold text-stone-800 text-sm sm:text-base">3. Empati Relasional (Empathy)</span>
+              <p class="text-xs text-stone-500">Kapasitas menyayangi orang lain tanpa menelan mentah-mentah emosi mereka (hindari people-pleasing).</p>
+            </div>
+            <span id="scoreEmpathyVal" class="text-emerald-700 font-bold text-lg px-3 py-1 bg-white rounded-lg border border-stone-200">4/5</span>
+          </div>
+          <input type="range" min="1" max="5" value="4" id="scoreEmpathy" oninput="updatePotentialsAudit()" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+          <div class="flex justify-between text-[11px] text-stone-400 mt-1 font-medium">
+            <span>1: Dingin/Apatis terhadap sesama</span>
+            <span>5: Menyayangi seimbang (tidak menindas diri)</span>
+          </div>
+        </div>
+
+        <!-- Potensi 4: Conscience -->
+        <div class="bg-stone-50 p-4 sm:p-5 rounded-xl border border-stone-200">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="font-semibold text-stone-800 text-sm sm:text-base">4. Suara Hati Nurani (Conscience)</span>
+              <p class="text-xs text-stone-500">Kompas batin ilahiah (istafti qalbak) yang membimbing pada prinsip kebenaran dan rida Allah.</p>
+            </div>
+            <span id="scoreConscienceVal" class="text-emerald-700 font-bold text-lg px-3 py-1 bg-white rounded-lg border border-stone-200">3/5</span>
+          </div>
+          <input type="range" min="1" max="5" value="3" id="scoreConscience" oninput="updatePotentialsAudit()" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+          <div class="flex justify-between text-[11px] text-stone-400 mt-1 font-medium">
+            <span>1: Dibungkam rasa takut dinilai manusia</span>
+            <span>5: Menjadi kompas utama pengambilan keputusan</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagnostic Feedback Summary Box -->
+      <div id="diagnosticAlert" class="p-4 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs sm:text-sm flex items-start space-x-3">
+        <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+        </svg>
+        <div>
+          <strong class="font-semibold block mb-0.5">Analisis Keselarasan Saat Ini:</strong>
+          <span id="diagnosticText">Empati Anda bekerja tinggi namun jika fisik (sensing) diabaikan, Anda rentan mengalami caregiver burnout dan lelah menyenangkan orang lain.</span>
+        </div>
+      </div>
+
+      <!-- Ruang Refleksi Langkah 1 -->
+      <div>
+        <label class="block text-xs font-semibold text-stone-700 uppercase tracking-wide mb-1">
+          Catatan Audit Kejujuran Pribadi:
+        </label>
+        <p class="text-xs text-stone-500 mb-2">Potensi mana yang selama ini paling sering kamu abaikan saat mengambil keputusan?</p>
+        <textarea id="reflectionStep1" rows="3" placeholder="Contoh: Saya terlalu memprioritaskan perasaan orang lain (empati berlebih) dan logika untung rugi, tapi saya menindas tubuh saya yang sudah sangat lelah dan menolak mendengarkan ketukan hati nurani saya..." class="w-full text-sm p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 outline-none"></textarea>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">2</span>
+          <span>Langkah 2 — Membedakan Sumber Keraguan Batin</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">The Voice Decoder: Suara Nurani (Conscience) vs Suara Ketakutan (Fear)</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          <strong>Maksudnya:</strong> Membedakan peringatan jernih hati nurani dengan kepanikan ego yang takut ditolak, dicap buruk, atau ditinggalkan orang lain.
+        </p>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-stone-700 uppercase tracking-wide mb-1">
+          1. Satu Keputusan / Rencana Hidup yang Saat Ini Paling Membuatmu Ragu:
+        </label>
+        <input type="text" id="decisionTopic" placeholder="Contoh: Mengundurkan diri dari komite keluarga / Berani memulai usaha baru / Menegur pasangan soal kejujuran" class="w-full text-sm p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none">
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <!-- Kolom Suara Ketakutan -->
+        <div class="bg-red-50/60 p-5 rounded-xl border border-red-200/80 space-y-3">
+          <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+            <svg class="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Suara Ketakutan (Inner Critic / Fear)</span>
+          </div>
+          <p class="text-xs text-red-700 leading-relaxed">
+            Cirinya: Terburu-buru, mendikte dengan rasa malu/takut, menuntut pembuktian manusia, bernada kasar: <em>"Nanti kamu dijauhi, kamu durhaka, kamu sombong!"</em>
+          </p>
+          <textarea id="fearVoiceText" rows="4" placeholder="Apa yang dibisikkan suara ketakutan ini di kepalamu? Tuliskan secara blak-blakan..." class="w-full text-sm p-3 bg-white border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"></textarea>
+        </div>
+
+        <!-- Kolom Suara Nurani -->
+        <div class="bg-emerald-50/70 p-5 rounded-xl border border-emerald-200 space-y-3">
+          <div class="flex items-center space-x-2 text-emerald-800 font-bold text-sm">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Suara Hati Nurani (Conscience Fitrah)</span>
+          </div>
+          <p class="text-xs text-emerald-700 leading-relaxed">
+            Cirinya: Tenang, berwibawa, berlandaskan amanah di hadapan Allah, berani berkata benar: <em>"Jaga kehormatan dirimu, melangkah demi rida Allah, bukan demi pujian."</em>
+          </p>
+          <textarea id="conscienceVoiceText" rows="4" placeholder="Ketika kamu menarik napas dalam dan jujur di hadapan Allah, apa yang sebenarnya nuranimu inginkan?" class="w-full text-sm p-3 bg-white border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">3</span>
+          <span>Langkah 3 — Memetakan Garis Teritori Diri</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">Healthy Boundaries Blueprint (Matriks Batasan Diri)</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          <strong>Maksudnya:</strong> Menegakkan batas pagar teritori hidupmu yang selama ini dibiarkan jebol demi menyenangkan orang lain (<em>weak boundaries</em>).
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Batasan 1: Waktu & Energi Pribadi -->
+          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 block">1. Batasan Waktu & Tenaga (Time & Energy)</span>
+            <p class="text-xs text-stone-500">Hal apa yang tidak boleh lagi mencuri waktu istirahat dan ibadahmu?</p>
+            <input type="text" id="boundaryTime" placeholder="Contoh: Tidak membalas chat pekerjaan/keluarga toksik di atas jam 21.00 malam." class="w-full text-sm p-2.5 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+          </div>
+
+          <!-- Batasan 2: Finansial & Pinjaman -->
+          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 block">2. Batasan Finansial (Financial Boundary)</span>
+            <p class="text-xs text-stone-500">Hal apa yang selama ini kamu biarkan dimanfaatkan orang lain dan harus distop?</p>
+            <input type="text" id="boundaryFinance" placeholder="Contoh: Berhenti meminjamkan uang darurat keluarga kepada kerabat yang tidak bertanggung jawab." class="w-full text-sm p-2.5 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+          </div>
+
+          <!-- Batasan 3: Emosional & Curhat Negatif -->
+          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 block">3. Batasan Emosional (Emotional Space)</span>
+            <p class="text-xs text-stone-500">Bagaimana kamu membatasi diri agar tidak menjadi 'tempat sampah emosi' terus-menerus?</p>
+            <input type="text" id="boundaryEmotional" placeholder="Contoh: Tidak terlibat dalam drama perdebatan keluarga yang saling menjatuhkan." class="w-full text-sm p-2.5 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+          </div>
+
+          <!-- Batasan 4: Perlakuan Kasar / Manipulasi -->
+          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 block">4. Batasan Martabat & Perlakuan (Respect Boundary)</span>
+            <p class="text-xs text-stone-500">Sikap kasar/merendahkan seperti apa yang tidak akan lagi kamu toleransi?</p>
+            <input type="text" id="boundaryRespect" placeholder="Contoh: Jika dibentak atau dihina, saya akan menghentikan obrolan dan keluar ruangan dengan tenang." class="w-full text-sm p-2.5 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">4</span>
+          <span>Langkah 4 — Latihan Komunikasi Asertif Tanpa Bersalah</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">Simulasi Skrip Penolakan Asertif (No False Apology)</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          <strong>Maksudnya:</strong> Menyatakan penolakan tegas, elegan, dan santun tanpa mengemis maaf seolah menjaga diri adalah tindak kejahatan.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-stone-600 mb-1">Kepada Siapa Skrip Ini Ditujukan?</label>
+          <input type="text" id="scriptTarget" placeholder="Contoh: Atasan / Pasangan / Orang Tua / Teman" class="w-full text-sm p-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600 mb-1">Permintaan / Situasi yang Akan Ditolak</label>
+          <input type="text" id="scriptDemand" placeholder="Contoh: Permintaan tugas di luar jam / Paksaan hadir acara" class="w-full text-sm p-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-600 mb-1">Alternatif / Doa Penutup Positif</label>
+          <input type="text" id="scriptAlternative" placeholder="Contoh: Semoga kegiatannya berjalan lancar" class="w-full text-sm p-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
+        </div>
+      </div>
+
+      <!-- Live Generated Script Card -->
+      <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-5 rounded-xl border border-emerald-200">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-emerald-900 uppercase tracking-wide">Hasil Rumusan Kalimat Asertif:</span>
+          <span class="text-[11px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-medium">Haram Minta Maaf Palsu</span>
+        </div>
+        <div id="scriptOutput" class="text-sm font-medium text-stone-800 italic bg-white p-4 rounded-lg border border-emerald-100 shadow-xs leading-relaxed">
+          "Terima kasih atas kepercayaannya. Namun untuk saat ini kapasitas saya sudah penuh, sehingga saya belum bisa membantu agenda tersebut. Semoga kegiatannya berjalan dengan baik dan lancar."
+        </div>
+        <div class="flex justify-end mt-2 no-print">
+          <button onclick="generateCustomScript()" class="text-xs font-semibold text-emerald-700 hover:text-emerald-900 hover:underline">
+            ⟳ Segarkan Rumusan Skrip
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">5</span>
+          <span>Langkah 5 (Paling Sulit) — Kemerdekaan Jiwa di Hadapan Manusia</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">Menghadapi Risiko Ketidaksukaan Orang Lain (Courage & Istiqamah)</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          <strong>Maksudnya:</strong> Menerima konsekuensi bahwa saat kita mulai berprinsip, orang-orang yang selama ini mengambil keuntungan dari kelemahan kita akan merasa tidak senang atau menuduh kita berubah.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 uppercase tracking-wide mb-1">
+            Siapa orang terdekat yang paling kamu takuti jika mereka kecewa/marah padamu?
+          </label>
+          <input type="text" id="disapprovalPerson" placeholder="Contoh: Ibu kandung / Suami / Atasan di kantor" class="w-full text-sm p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none">
+        </div>
+
+        <div class="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-3">
+          <span class="text-xs font-bold text-stone-700 uppercase tracking-wide block">
+            Deklarasi Kemerdekaan Batin (Self-Grounding Statement):
+          </span>
+          <p class="text-xs text-stone-500">
+            Lengkapi kalimat deklarasi berikut, bacakan dengan lantang dalam hati, dan letakkan tangan kanan di dadamu:
+          </p>
+          <div class="p-4 bg-white rounded-lg border border-stone-300 text-sm leading-relaxed text-stone-800 space-y-3">
+            <p>
+              "Aku menyayangi <span class="font-bold underline text-emerald-800" id="nameTargetDisplay">[orang tersebut]</span>. Namun perasaan kecewa atau ketidaksetujuan mereka adalah tanggung jawab emosi mereka sendiri di hadapan Allah, bukan dosaku."
+            </p>
+            <p>
+              "Tugasku di muka bumi ini bukan untuk memastikan semua orang tersenyum padaku, melainkan untuk menjaga <span class="font-bold text-stone-900">amanah fitrah jiwa</span> yang Allah titipkan dan bertindak adil di atas kebenaran."
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-700 uppercase tracking-wide mb-1">
+            Doa & Penyerahan Batin kepada Allah (Tawakal Total):
+          </label>
+          <textarea id="tawakkalPrayerStep5" rows="3" placeholder="Tuliskan doamu memohon kekuatan hati agar tidak gentar pada penilaian makhluk..." class="w-full text-sm p-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 outline-none"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-6 page-break-avoid">
+      <div class="border-b border-stone-200 pb-4">
+        <div class="flex items-center space-x-2 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-1">
+          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center font-bold">6</span>
+          <span>Aktivitas Sepekan (Senin s.d. Jumat) — Async WhatsApp Integration</span>
+        </div>
+        <h3 class="text-xl font-bold text-stone-900 font-serif">Daily Micro-Reflection Tracker: Menjaga Coherent Heart</h3>
+        <p class="text-xs sm:text-sm text-stone-500 mt-1">
+          Catat 1 situasi nyata setiap hari di mana kamu berhasil memilih suara nurani daripada dorongan takut/people-pleasing.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <!-- Senin -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+          <div class="sm:col-span-1">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Senin</span>
+            <span class="text-[11px] text-stone-400">Batasan Waktu</span>
+          </div>
+          <div class="sm:col-span-3">
+            <input type="text" id="dailyLogMon" placeholder="Situasi nyata & pilihan asertifmu hari ini..." class="w-full text-xs sm:text-sm p-2 bg-white border border-stone-300 rounded-lg outline-none focus:ring-1 focus:ring-emerald-600">
+          </div>
+        </div>
+
+        <!-- Selasa -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+          <div class="sm:col-span-1">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Selasa</span>
+            <span class="text-[11px] text-stone-400">Mendengar Tubuh (Sensing)</span>
+          </div>
+          <div class="sm:col-span-3">
+            <input type="text" id="dailyLogTue" placeholder="Kapan kamu memberi hak fisikmu beristirahat tanpa bersalah?" class="w-full text-xs sm:text-sm p-2 bg-white border border-stone-300 rounded-lg outline-none focus:ring-1 focus:ring-emerald-600">
+          </div>
+        </div>
+
+        <!-- Rabu -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+          <div class="sm:col-span-1">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Rabu</span>
+            <span class="text-[11px] text-stone-400">Uji Suara Ketakutan</span>
+          </div>
+          <div class="sm:col-span-3">
+            <input type="text" id="dailyLogWed" placeholder="Kritik batin apa yang berhasil kamu abaikan hari ini?" class="w-full text-xs sm:text-sm p-2 bg-white border border-stone-300 rounded-lg outline-none focus:ring-1 focus:ring-emerald-600">
+          </div>
+        </div>
+
+        <!-- Kamis -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+          <div class="sm:col-span-1">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Kamis</span>
+            <span class="text-[11px] text-stone-400">Ketegasan Asertif</span>
+          </div>
+          <div class="sm:col-span-3">
+            <input type="text" id="dailyLogThu" placeholder="Permintaan apa yang berhasil kamu tolak secara sopan?" class="w-full text-xs sm:text-sm p-2 bg-white border border-stone-300 rounded-lg outline-none focus:ring-1 focus:ring-emerald-600">
+          </div>
+        </div>
+
+        <!-- Jumat -->
+        <div class="p-3.5 bg-stone-50 rounded-xl border border-stone-200 grid grid-cols-1 sm:grid-cols-4 gap-2 items-center">
+          <div class="sm:col-span-1">
+            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Jumat</span>
+            <span class="text-[11px] text-stone-400">Evaluasi & Syukur</span>
+          </div>
+          <div class="sm:col-span-3">
+            <input type="text" id="dailyLogFri" placeholder="Seberapa tenang dadamu setelah sepekan menjaga jati diri fitrahmu?" class="w-full text-xs sm:text-sm p-2 bg-white border border-stone-300 rounded-lg outline-none focus:ring-1 focus:ring-emerald-600">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-stone-900 text-stone-200 p-6 sm:p-8 rounded-2xl shadow-sm space-y-4 page-break-avoid">
+      <div class="flex items-center space-x-3 text-amber-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-xs uppercase font-bold tracking-widest text-amber-200">Komitmen Peserta Menuju Sesi 3</span>
+      </div>
+      <p class="text-xs sm:text-sm text-stone-300 leading-relaxed italic">
+        "Dengan mengisi jurnal ini, saya berikhtiar memulihkan keselarasan hati dan potensi diri saya. Saya melepaskan ketergantungan pada validasi manusia dan siap melangkah ke Pekan 3 untuk menambatkan jangkar hidup seutuhnya kepada Allah SWT."
+      </p>
+
+      <div class="pt-4 border-t border-stone-800 flex flex-wrap justify-between items-center text-xs text-stone-400 gap-2">
+        <span>Program: <em>Kembali Menemukan Jati Diri</em> • AMI Muslim Growth</span>
+        <span>Dokumen ini bersifat rahasia & sarana refleksi mandiri</span>
+      </div>
+    </section>
+
+    <!-- Floating / Bottom Action Controls (Hidden on Print) -->
+    <div class="no-print pt-4 flex flex-wrap justify-center gap-3">
+      <button onclick="downloadPdf()" class="px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl shadow-md transition flex items-center space-x-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        <span>Unduh Jurnal Refleksi (PDF)</span>
+      </button>
+      <button onclick="resetJournalForm()" class="px-5 py-3 bg-stone-200 hover:bg-stone-300 text-stone-700 font-medium rounded-xl transition">
+        Kosongkan Form
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    // List of input IDs to sync and auto-save
+    const fieldIds = [
+      'participantName', 'assignmentDate', 'participantRole',
+      'scoreSensing', 'scoreReasoning', 'scoreEmpathy', 'scoreConscience',
+      'reflectionStep1', 'decisionTopic', 'fearVoiceText', 'conscienceVoiceText',
+      'boundaryTime', 'boundaryFinance', 'boundaryEmotional', 'boundaryRespect',
+      'scriptTarget', 'scriptDemand', 'scriptAlternative',
+      'disapprovalPerson', 'tawakkalPrayerStep5',
+      'dailyLogMon', 'dailyLogTue', 'dailyLogWed', 'dailyLogThu', 'dailyLogFri'
+    ];
+
+    // Initialize values on window load
+    window.onload = function() {
+      // Set today's date if empty
+      const dateField = document.getElementById('assignmentDate');
+      if (!dateField.value) {
+        const today = new Date().toISOString().split('T')[0];
+        dateField.value = today;
+      }
+
+      // Load saved state from storage if available
+      loadSavedData();
+      updatePotentialsAudit();
+      setupAutoListeners();
+    };
+
+    function setupAutoListeners() {
+      fieldIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.addEventListener('input', () => {
+            saveProgressToLocal();
+            if (id === 'disapprovalPerson') {
+              updateNameTargetDisplay();
+            }
+            if (['scriptTarget', 'scriptDemand', 'scriptAlternative'].includes(id)) {
+              generateCustomScript();
+            }
+          });
+        }
+      });
+    }
+
+    function updateNameTargetDisplay() {
+      const val = document.getElementById('disapprovalPerson').value.trim();
+      document.getElementById('nameTargetDisplay').innerText = val ? val : '[orang tersebut]';
+    }
+
+    // Logic to calculate audit status and dynamic feedback
+    function updatePotentialsAudit() {
+      const sensing = parseInt(document.getElementById('scoreSensing').value);
+      const reasoning = parseInt(document.getElementById('scoreReasoning').value);
+      const empathy = parseInt(document.getElementById('scoreEmpathy').value);
+      const conscience = parseInt(document.getElementById('scoreConscience').value);
+
+      document.getElementById('scoreSensingVal').innerText = sensing + '/5';
+      document.getElementById('scoreReasoningVal').innerText = reasoning + '/5';
+      document.getElementById('scoreEmpathyVal').innerText = empathy + '/5';
+      document.getElementById('scoreConscienceVal').innerText = conscience + '/5';
+
+      const alertBox = document.getElementById('diagnosticAlert');
+      const textElem = document.getElementById('diagnosticText');
+
+      if (empathy >= 4 && sensing <= 2) {
+        textElem.innerText = "Ketidakseimbangan terdeteksi: Empatimu sangat tinggi namun mengorbankan fisik (sensing). Ini resep instan menuju burnout dan pengorbanan beracun (people-pleasing). Kuatkan batasan!";
+        alertBox.className = "p-4 rounded-xl bg-red-50 border border-red-200 text-red-900 text-xs sm:text-sm flex items-start space-x-3";
+      } else if (reasoning >= 4 && conscience <= 2) {
+        textElem.innerText = "Akal logikamu bekerja keras namun mematikan ketukan nurani. Waspada terjebak overthinking dan kelumpuhan analisis. Kembalilah mendengarkan getaran batinmu.";
+        alertBox.className = "p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm flex items-start space-x-3";
+      } else if (conscience >= 4 && sensing >= 3 && reasoning >= 3 && empathy >= 3) {
+        textElem.innerText = "Alhamdulillah! Instrumen fitrahmu mulai menunjukkan keterpaduan menuju Coherent Heart. Pertahankan ketenangan dan ketegasan langkah ini.";
+        alertBox.className = "p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm flex items-start space-x-3";
+      } else {
+        textElem.innerText = "Instrumen diri sedang dalam proses penyelarasan. Perhatikan potensi yang nilainya masih rendah agar tidak menjadi pintu masuk keraguan diri.";
+        alertBox.className = "p-4 rounded-xl bg-stone-100 border border-stone-300 text-stone-800 text-xs sm:text-sm flex items-start space-x-3";
+      }
+    }
+
+    function generateCustomScript() {
+      const target = document.getElementById('scriptTarget').value.trim() || 'rekan kerja / keluarga';
+      const demand = document.getElementById('scriptDemand').value.trim() || 'hal tersebut';
+      const alt = document.getElementById('scriptAlternative').value.trim() || 'Semoga agendanya berjalan dengan lancar';
+
+      const output = `"Terima kasih atas kepercayaannya. Namun untuk saat ini kapasitas saya sudah penuh, sehingga saya tidak bisa memenuhi permintaan terkait ${demand}. Semoga ${alt.toLowerCase()}."`;
+      document.getElementById('scriptOutput').innerText = output;
+    }
+
+    function saveProgressToLocal() {
+      try {
+        const data = {};
+        fieldIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) data[id] = el.value;
+        });
+        localStorage.setItem('ami_worksheet_sesi2_data', JSON.stringify(data));
+        showToast("Tersimpan");
+      } catch (e) {
+        // Fallback gracefully
+      }
+    }
+
+    function saveProgressManually() {
+      saveProgressToLocal();
+      const status = document.getElementById('saveStatus');
+      status.innerText = "✓ Draft Berhasil Disimpan!";
+      status.classList.remove('hidden');
+      setTimeout(() => {
+        status.innerText = "Draft otomatis tersimpan";
+      }, 3000);
+    }
+
+    function loadSavedData() {
+      try {
+        const raw = localStorage.getItem('ami_worksheet_sesi2_data');
+        if (raw) {
+          const data = JSON.parse(raw);
+          fieldIds.forEach(id => {
+            if (data[id] !== undefined && document.getElementById(id)) {
+              document.getElementById(id).value = data[id];
+            }
+          });
+          updateNameTargetDisplay();
+          generateCustomScript();
+        }
+      } catch (e) {
+        // Fallback gracefully
+      }
+    }
+
+    function showToast(msg) {
+      const status = document.getElementById('saveStatus');
+      if (status) {
+        status.innerText = msg;
+        status.classList.remove('hidden');
+      }
+    }
+
+    async function downloadPdf() {
+      const btns = [document.getElementById('btnPdfTop')];
+      const orig = btns.map(b => b ? b.innerHTML : '');
+      btns.forEach(b => { if (b) { b.innerHTML = '<span>Memproses PDF...</span>'; b.disabled = true; } });
+      window.scrollTo(0, 0);
+
+      const W = 1024;
+      const holder = document.createElement('div');
+      holder.id = 'pdf-container';
+      document.body.appendChild(holder);
+
+      const src = document.querySelector('main');
+      const clone = src.cloneNode(true);
+      clone.style.cssText = 'width:' + W + 'px;max-width:none;margin:0;padding:16px 24px;box-sizing:border-box;';
+      holder.appendChild(clone);
+
+      // Ganti input/textarea dengan elemen statis agar teks ter-wrap penuh
+      const sf = src.querySelectorAll('input, textarea');
+      const cf = clone.querySelectorAll('input, textarea');
+      sf.forEach((s, i) => {
+        const c = cf[i];
+        const box = document.createElement('div');
+        if (s.type === 'range') {
+          const pct = ((parseInt(s.value) - 1) / 4) * 100;
+          box.style.cssText = 'position:relative;width:100%;height:20px;';
+          box.innerHTML = '<div style="position:absolute;top:6px;left:0;right:0;height:8px;border-radius:8px;background:#e7e5e4"></div>' +
+            '<div style="position:absolute;top:6px;left:0;height:8px;border-radius:8px;background:#10b981;width:' + pct + '%"></div>' +
+            '<div style="position:absolute;top:0;width:20px;height:20px;border-radius:50%;background:#047857;margin-left:-10px;left:' + pct + '%"></div>';
+        } else {
+          box.className = c.className;
+          box.classList.remove('resize-none', 'overflow-hidden');
+          box.style.cssText = 'white-space:pre-wrap;overflow-wrap:anywhere;min-height:2.5rem;';
+          box.textContent = s.value;
+        }
+        c.replaceWith(box);
+      });
+      clone.querySelectorAll('.no-print').forEach(el => el.remove());
+
+      try {
+        await document.fonts.ready;
+        await new Promise(r => setTimeout(r, 300));
+
+        const SCALE = 1.5;
+        const canvas = await html2canvas(clone, {
+          scale: SCALE, useCORS: true, backgroundColor: '#ffffff',
+          width: W, windowWidth: W, x: 0, y: 0, scrollX: 0, scrollY: 0
+        });
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+        const M = 10, contentW = 210 - 2 * M, contentH = 297 - 2 * M;
+        const pageHpx = Math.floor(W * contentH / contentW);
+        const totalPx = Math.round(canvas.height / SCALE);
+
+        // Titik potong aman = bagian atas tiap blok utama
+        const cTop = clone.getBoundingClientRect().top;
+        const breaks = [...clone.children].map(el => Math.round(el.getBoundingClientRect().top - cTop));
+
+        let y = 0, first = true;
+        while (y < totalPx - 2) {
+          let end = Math.min(y + pageHpx, totalPx);
+          if (end < totalPx) {
+            const ok = breaks.filter(b => b > y + 250 && b <= end);
+            if (ok.length) end = Math.max(...ok);
+          }
+          const sliceH = end - y;
+          const page = document.createElement('canvas');
+          page.width = canvas.width;
+          page.height = Math.round(sliceH * SCALE);
+          const ctx = page.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, page.width, page.height);
+          ctx.drawImage(canvas, 0, Math.round(y * SCALE), canvas.width, page.height, 0, 0, canvas.width, page.height);
+          if (!first) pdf.addPage();
+          pdf.addImage(page.toDataURL('image/jpeg', 0.95), 'JPEG', M, M, contentW, sliceH * contentW / W);
+          first = false;
+          y = end;
+        }
+        pdf.save('Jurnal-Refleksi-Sesi-2.pdf');
+      } catch (err) {
+        console.error(err);
+        alert('Terjadi kesalahan saat membuat PDF. Coba buka lewat Chrome/Safari.');
+      } finally {
+        holder.remove();
+        btns.forEach((b, i) => { if (b) { b.innerHTML = orig[i]; b.disabled = false; } });
+      }
+    }
+
+    function resetJournalForm() {
+      if (window.confirm("Apakah kamu yakin ingin mengosongkan seluruh isian jurnal ini?")) {
+        fieldIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === 'range') el.value = 3;
+            else if (el.type === 'date') el.value = new Date().toISOString().split('T')[0];
+            else el.value = '';
+          }
+        });
+        try { localStorage.removeItem('ami_worksheet_sesi2_data'); } catch (e) {}
+        updatePotentialsAudit();
+        updateNameTargetDisplay();
+        generateCustomScript();
+      }
+    }
+  </script>
+</body>
+</html>
